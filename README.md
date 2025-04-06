@@ -5,7 +5,7 @@
 
 - ASP.NET core v.8
 - Entity Framework 8.11
-
+- DataBase - SQLite
 ## Структура БД 
 
 
