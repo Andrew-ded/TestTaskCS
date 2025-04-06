@@ -1,0 +1,35 @@
+@model Model.Subdivision
+@using Domain
+@{
+    // Вычисляем общее количество сотрудников (включая подчиненные подразделения)
+    int totalEmployees = Model.Users?.Count ?? 0;
+    if (Model.Subdivisions?.Any() == true)
+    {
+        foreach (var child in Model.Subdivisions)
+        {
+            totalEmployees += child.Users?.Count ?? 0;
+        }
+    }
+}
+
+<div class="department-card">
+    <div class="department-header">
+        <h5 class="mb-0">@Model.Name</h5>
+    </div>
+    <div class="department-body">
+        <div class="d-flex mb-3">
+            <span class="stats-badge bg-primary">Сотрудники: @(Model.Users?.Count ?? 0)</span>
+            <span class="stats-badge bg-info">Всего сотрудников: @Func.CountEmployees(Model)</span>
+            
+            @if (Model.Subdivisions?.Count != null && Model.Subdivisions?.Count !=0 )
+            {
+                <span class="stats-badge bg-success">Подразделения: @(Model.Subdivisions?.Count ?? 0)</span>
+            }
+            
+        </div>
+
+        <a href="@Url.Action("Department", "Home", new { id = Model.Id })" class="btn btn-outline-primary btn-sm">
+            Подробнее
+        </a>
+    </div>
+</div> 

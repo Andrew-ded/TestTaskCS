@@ -1,0 +1,142 @@
+﻿@*
+   
+*@
+@model Model.Subdivision
+@using Domain
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .department-card {
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
+            background-color: #fff;
+        }
+        .department-header {
+            background-color: #4a6baf;
+            color: white;
+            padding: 15px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .department-body {
+            padding: 15px;
+            background-color: #fff;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+        .stats-badge {
+            font-size: 0.85rem;
+            border-radius: 8px;
+            padding: 4px 8px;
+            margin-right: 5px;
+            white-space: nowrap;
+        }
+        .employee-list {
+            margin-top: 20px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .employee-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .subdivision-list {
+            margin-top: 20px;
+        }
+        .subdivision-item {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .back-button {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <a href="@Url.Action("Index", "Home")" class="btn btn-outline-secondary back-button">
+            <i class="bi bi-arrow-left">←</i> Назад к списку подразделений
+        </a>
+
+        <div class="department-card">
+            <div class="department-header">
+                <h3 class="mb-0">@Model.Name</h3>
+            </div>
+            <div class="department-body">
+                <div class="d-flex mb-3">
+                    <span class="stats-badge bg-primary">Сотрудники: @(Model.Users?.Count ?? 0)</span>
+                    <span class="stats-badge bg-info">Всего сотрудников: @Func.CountEmployees(Model)</span>
+                    <span class="stats-badge bg-success">Подразделения: @(Model.Subdivisions?.Count ?? 0)</span>
+                    
+
+                </div>
+
+                @if (Model.Users?.Any() == true)
+                {
+                    <div class="employee-list">
+                        <h4>Сотрудники подразделения</h4>
+                        @foreach (var user in Model.Users)
+                        {
+                            <div class="employee-item">
+                                <span>@user.Name @user.SecondName @user.Fatherland</span>
+                                
+                                <span>@user.Job_title</span>
+                                
+                            </div>
+                        }
+                    </div>
+                }
+
+                @if (Model.Subdivisions?.Any() == true)
+                {
+                    <div class="subdivision-list">
+                        <h4>Подчиненные подразделения</h4>
+                        @foreach (var sub in Model.Subdivisions)
+                        {
+                            
+                                
+                           
+                            
+
+                            <div class="subdivision-item">
+                                <h5>@sub.Name</h5>
+                                <div class="d-flex">
+                                    <span class="stats-badge bg-primary">Сотрудники: @(sub.Users?.Count ?? 0)</span>
+                                    <span class="stats-badge bg-info">Всего сотрудников: @Func.CountEmployees(sub)</span>
+                                    @if (sub.Subdivisions?.Count != null && sub.Subdivisions?.Count !=0 ){
+                                        <span class="stats-badge bg-success">Подразделения: @(sub.Subdivisions?.Count ?? 0)</span>
+                                    }
+                                    
+                                </div>
+                                <a href="@Url.Action("Department", "Home", new { id = sub.Id })" class="btn btn-outline-primary btn-sm mt-2">
+                                    Подробнее
+                                </a>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
